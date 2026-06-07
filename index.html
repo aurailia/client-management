@@ -560,7 +560,7 @@ const SEED_GOALS={
 const SEED_METRICS=[
   {id:'rev',name:'Monthly Revenue',emoji:'💰',current:0,target:10000,prefix:'$',suffix:'',monthly:true,history:[]},
   {id:'skool',name:'Skool Members',emoji:'🏛️',current:32,target:100,prefix:'',suffix:'',monthly:false,history:[]},
-  {id:'ig',name:'Instagram',emoji:'📸',current:0,target:5000,prefix:'',suffix:'',monthly:false,history:[]},
+  {id:'ig',name:'Skool Visitors',emoji:'👀',current:0,target:1000,prefix:'',suffix:'',monthly:false,history:[]},
   {id:'yt',name:'YouTube',emoji:'▶️',current:0,target:1000,prefix:'',suffix:'',monthly:false,history:[]}
 ];
 
@@ -599,6 +599,10 @@ function migrate(s){
   // Members moved to the top Growth Trackers. Remove the Skool duplicate,
   // but only if it has no logged history (never delete entered data).
   s.skool=s.skool.filter(m=>!(m.id==='members'&&(!m.log||m.log.length===0)));
+  // The "Instagram" growth tracker became "Skool Visitors". Relabel in place so
+  // any numbers already logged on that card carry over to the new name.
+  const ig=(s.metrics||[]).find(m=>m.id==='ig');
+  if(ig&&ig.name==='Instagram'){ig.name='Skool Visitors';ig.emoji='👀';if(ig.target===5000)ig.target=1000;}
   // backfill client fields that may not exist on older saved clients
   s.clients.forEach(c=>{
     if(c.artifactLink===undefined)c.artifactLink='';
